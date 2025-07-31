@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">College Mathematics Calculator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 60px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: none;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .calculator-input {
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .calculator-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .result-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .steps-container {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading-spinner {
+            display: none;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-calculator me-2 text-primary"></i>
+                Math Calculator
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/calculator">Calculator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/calculus">Calculus</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/algebra">Algebra</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/matrix">Matrix</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container" style="margin-top: 80px;">
+        <div class="main-container">
+            <!-- Hero Section -->
+            <div class="hero-section text-center">
+                <div class="container">
+                    <h1 class="display-4 fw-bold mb-4">College Mathematics Calculator</h1>
+                    <p class="lead mb-4" th:text="${description}">Advanced mathematical calculations with step-by-step solutions</p>
+                    <a href="/calculator" class="btn btn-light btn-lg me-3">
+                        <i class="fas fa-calculator me-2"></i>Start Calculating
+                    </a>
+                    <a href="/about" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="container py-5">
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card feature-card">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <h5 class="card-title">Basic Calculator</h5>
+                                <p class="card-text">Perform basic arithmetic operations with step-by-step solutions.</p>
+                                <a href="/calculator" class="btn btn-primary">
+                                    <i class="fas fa-arrow-right me-2"></i>Calculate
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card feature-card">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h5 class="card-title">Calculus Tools</h5>
+                                <p class="card-text">Derivatives, integrals, limits with detailed step-by-step solutions.</p>
+                                <a href="/calculus" class="btn btn-primary">
+                                    <i class="fas fa-arrow-right me-2"></i>Explore
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card feature-card">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-square-root-alt"></i>
+                                </div>
+                                <h5 class="card-title">Algebra Solver</h5>
+                                <p class="card-text">Solve equations, factor polynomials, and simplify expressions.</p>
+                                <a href="/algebra" class="btn btn-primary">
+                                    <i class="fas fa-arrow-right me-2"></i>Solve
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card feature-card">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-th"></i>
+                                </div>
+                                <h5 class="card-title">Matrix Operations</h5>
+                                <p class="card-text">Matrix multiplication, determinants, inverses, and more.</p>
+                                <a href="/matrix" class="btn btn-primary">
+                                    <i class="fas fa-arrow-right me-2"></i>Compute
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Calculator Section -->
+            <div class="container pb-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0"><i class="fas fa-calculator me-2"></i>Quick Calculator</h4>
+                            </div>
+                            <div class="card-body">
+                                <form id="quickCalculatorForm">
+                                    <div class="mb-3">
+                                        <label for="expression" class="form-label">Enter Expression:</label>
+                                        <input type="text" class="form-control calculator-input" id="expression" 
+                                               placeholder="e.g., 2*x^2 + 3*x - 1, sin(30), sqrt(16)" required>
+                                        <div class="form-text">
+                                            Supported: +, -, *, /, ^, sin(), cos(), tan(), sqrt(), ln(), log()
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="operationType" class="form-label">Operation:</label>
+                                                <select class="form-select" id="operationType">
+                                                    <option value="calculate">Calculate</option>
+                                                    <option value="differentiate">Differentiate</option>
+                                                    <option value="integrate">Integrate</option>
+                                                    <option value="solve">Solve Equation</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="variable" class="form-label">Variable (if applicable):</label>
+                                                <input type="text" class="form-control" id="variable" 
+                                                       placeholder="x" value="x">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-play me-2"></i>Calculate
+                                            <span class="loading-spinner ms-2">
+                                                <i class="fas fa-spinner fa-spin"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <div id="resultContainer" class="result-container" style="display: none;">
+                                    <h5><i class="fas fa-check-circle text-success me-2"></i>Result:</h5>
+                                    <div id="result" class="fs-4 fw-bold text-primary mb-3"></div>
+                                    
+                                    <div id="stepsContainer" class="steps-container">
+                                        <h6><i class="fas fa-list-ol me-2"></i>Steps:</h6>
+                                        <ol id="steps" class="mb-0"></ol>
+                                    </div>
+                                </div>
+                                
+                                <div id="errorContainer" class="alert alert-danger" style="display: none;">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <span id="errorMessage"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 College Mathematics Calculator. Built for students, by developers.</p>
+            <p class="mb-0">
+                <a href="/about" class="text-light me-3">About</a>
+                <a href="/api/math/health" class="text-light me-3">API Status</a>
+                <a href="https://github.com" class="text-light">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    
+    <script>
+        // MathJax Configuration
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+
+        // Quick Calculator Form Handler
+        document.getElementById('quickCalculatorForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const loadingSpinner = submitBtn.querySelector('.loading-spinner');
+            const resultContainer = document.getElementById('resultContainer');
+            const errorContainer = document.getElementById('errorContainer');
+            
+            // Show loading state
+            loadingSpinner.style.display = 'inline';
+            submitBtn.disabled = true;
+            resultContainer.style.display = 'none';
+            errorContainer.style.display = 'none';
+            
+            try {
+                const formData = {
+                    expression: document.getElementById('expression').value,
+                    operationType: document.getElementById('operationType').value,
+                    variable: document.getElementById('variable').value || 'x'
+                };
+                
+                let endpoint = '/api/math/calculate';
+                switch (formData.operationType) {
+                    case 'differentiate':
+                        endpoint = '/api/math/differentiate';
+                        break;
+                    case 'integrate':
+                        endpoint = '/api/math/integrate';
+                        break;
+                    case 'solve':
+                        endpoint = '/api/math/solve-equation';
+                        break;
+                }
+                
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Display result
+                document.getElementById('result').innerHTML = data.result || 'No result';
+                
+                // Display steps
+                const stepsList = document.getElementById('steps');
+                stepsList.innerHTML = '';
+                if (data.steps) {
+                    data.steps.forEach(step => {
+                        const li = document.createElement('li');
+                        li.textContent = step;
+                        stepsList.appendChild(li);
+                    });
+                }
+                
+                resultContainer.style.display = 'block';
+                
+                // Re-render MathJax if available
+                if (window.MathJax) {
+                    MathJax.typesetPromise([resultContainer]);
+                }
+                
+            } catch (error) {
+                document.getElementById('errorMessage').textContent = error.message;
+                errorContainer.style.display = 'block';
+            } finally {
+                // Hide loading state
+                loadingSpinner.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
